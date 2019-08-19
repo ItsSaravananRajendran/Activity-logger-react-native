@@ -2,12 +2,14 @@ import React from 'react';
 import {createDrawerNavigator, createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import {homeActivity_StackNavigator} from './Activity/homescreen';
-import {profileActivity_StackNavigator} from './Activity/profile';
+import {homeActivity_StackNavigator} from './pages/homescreen';
+import {calendarActivity_StackNavigator} from './pages/calendar';
+import {addActivity_StackNavigator} from './pages/add-activity';
+import customNavigationDrawer from './component/nav-drawer/nav-drawer-component';
 
 const drawerNavigator = createDrawerNavigator(
   {
-    HomeDrawer: {
+    HomeActivity: {
       screen: homeActivity_StackNavigator,
       navigationOptions: {
         drawerLabel: 'Activity',
@@ -16,8 +18,17 @@ const drawerNavigator = createDrawerNavigator(
         ),
       },
     },
-    CalenderDrawer: {
-      screen: profileActivity_StackNavigator,
+    AddActivity: {
+      screen: addActivity_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Add Activity',
+        drawerIcon: ({tintColor}) => (
+          <Icon name="plus" size={24} color={tintColor} />
+        ),
+      },
+    },
+    CalenderActivity: {
+      screen: calendarActivity_StackNavigator,
       navigationOptions: {
         drawerLabel: 'Calendar',
         drawerIcon: ({tintColor}) => (
@@ -27,6 +38,7 @@ const drawerNavigator = createDrawerNavigator(
     },
   },
   {
+    contentComponent: customNavigationDrawer,
     contentOptions: {
       activeTintColor: 'green',
     },

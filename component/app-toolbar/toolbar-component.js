@@ -27,6 +27,6 @@ export default ToolBar;
 const styles = StyleSheet.create({
   mainContainer: {flexDirection: 'row'},
   hamburger: {
-    paddingLeft: 10,
+    marginLeft: 10,
   },
 });

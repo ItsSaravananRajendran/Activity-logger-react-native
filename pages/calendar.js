@@ -4,7 +4,7 @@ import {createStackNavigator} from 'react-navigation';
 
 import ToolBar from '../component/app-toolbar/toolbar-component';
 
-class ProfileScreen extends Component {
+class calendarScreen extends Component {
   render() {
     const {navigation} = this.props;
     const name = navigation.getParam('itemId', 'WTF');
@@ -12,11 +12,11 @@ class ProfileScreen extends Component {
   }
 }
 
-const profileActivity_StackNavigator = createStackNavigator({
+const calendarActivity_StackNavigator = createStackNavigator({
   Profile: {
-    screen: ProfileScreen,
+    screen: calendarScreen,
     navigationOptions: ({navigation}) => ({
-      title: 'Profile',
+      title: 'Calendar',
       headerLeft: <ToolBar navigationProps={navigation} />,
       headerStyle: {
         backgroundColor: '#3AAC68',
@@ -26,8 +26,8 @@ const profileActivity_StackNavigator = createStackNavigator({
   },
 });
 
-export {profileActivity_StackNavigator};
-export default ProfileScreen;
+export {calendarActivity_StackNavigator};
+export default calendarScreen;
 
 const styles = StyleSheet.create({
   main: {flex: 1, flexDirection: 'row'},

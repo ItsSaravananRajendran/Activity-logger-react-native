@@ -6,7 +6,7 @@ A personal app to track your day to day activitites, helps you to visualize, tra
 # TODOS
 
 - [ ] Display Current Activity 
-- [ ] Add activites
+- [x] Add activites
 - [ ] Display Calender 
 - [ ] Schedule a day
 - [ ] Graph for Different activites
