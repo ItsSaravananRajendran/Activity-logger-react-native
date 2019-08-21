@@ -4,14 +4,13 @@ import {createStackNavigator} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Input, Slider, Button} from 'react-native-elements';
 import RadioForm from 'react-native-simple-radio-button';
-import Realm from 'realm';
 
 import ToolBar from '../component/app-toolbar/toolbar-component';
 import WrapLabel from '../component/form/wrap-label.component';
 import {capitalizeFirstLetter} from '../utils/utils';
 
 import {ACTIVITY_TYPES} from '../data/activity-types';
-import {Activity} from '../data/activities-schema';
+import realm from '../data/activities-schema';
 
 class AddActivityScreen extends Component {
   constructor(props) {
@@ -22,10 +21,6 @@ class AddActivityScreen extends Component {
       goalTime: 0,
       errMessage: '',
     };
-  }
-
-  componentDidMount() {
-    this.realm = new Realm({schema: [Activity]});
   }
 
   onNameChange = name => {
@@ -41,15 +36,15 @@ class AddActivityScreen extends Component {
   };
 
   onSubmit = () => {
-    let activity = this.realm
+    let activity = realm
       .objects('Activity')
       .filtered(`name = "${capitalizeFirstLetter(this.state.name)}"`);
 
     if (activity.length !== 0) {
       this.setState({errMessage: 'This activity already exists!!!'});
     } else {
-      this.realm.write(() => {
-        this.realm.create('Activity', {
+      realm.write(() => {
+        realm.create('Activity', {
           name: this.state.name,
           type: this.state.type,
           goalTime: this.state.goalTime,
@@ -82,6 +77,7 @@ class AddActivityScreen extends Component {
             inputContainerStyle={style.textInput}
             errorMessage={this.state.errMessage}
             shake={this.state.errMessage.length !== 0}
+            autoFocus={true}
           />
         </WrapLabel>
         <WrapLabel label="Activity Type">

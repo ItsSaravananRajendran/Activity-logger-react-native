@@ -13,7 +13,7 @@ class calendarScreen extends Component {
 }
 
 const calendarActivity_StackNavigator = createStackNavigator({
-  Profile: {
+  Calendar: {
     screen: calendarScreen,
     navigationOptions: ({navigation}) => ({
       title: 'Calendar',

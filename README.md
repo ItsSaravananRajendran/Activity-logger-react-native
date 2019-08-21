@@ -5,11 +5,23 @@ A personal app to track your day to day activitites, helps you to visualize, tra
 
 # TODOS
 
-- [ ] Display Current Activity 
+- [x]  Current Activity page 
+  - [x] Display current activity
+  - [x] Searchable dropDown input box
+  - [x] Log activities
 - [x] Add activites
+  - [x] Persist data
+  - [x] Slider for selecting time
+  - [x] Error message 
 - [ ] Display Calender 
-- [ ] Schedule a day
+  - [ ] Schedulable 
+  - [ ] Select start date
+  - [ ] Toggle rows
+- [ ] Display Activities
+  - [ ] Display activities in list
+  - [ ] Editable
+  - [ ] swipe left delete
 - [ ] Graph for Different activites
-- [ ] Toggle visibility of rows in calender
-- [ ] Task Graph for specific activity
-- [ ] Graph for goals
+  - [ ] Quadrant Graph 
+    - [ ] Task Graph for specific quadran
+  - [ ] Goals graph

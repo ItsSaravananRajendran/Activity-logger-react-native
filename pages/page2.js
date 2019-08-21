@@ -1,11 +1,17 @@
 import React, {Component} from 'react';
 import {Text} from 'react-native';
+import {Button} from 'react-native-elements';
 
 class Page2Screen extends Component {
   render() {
     const {navigation} = this.props;
     const name = navigation.getParam('itemId', 'WTF');
-    return <Text> {name} </Text>;
+    return (
+      <Button
+        title={name}
+        onPress={() => navigation('AddActivity', {itemId: 86})}
+      />
+    );
   }
 }
 

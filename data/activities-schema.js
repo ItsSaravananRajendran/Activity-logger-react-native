@@ -1,3 +1,5 @@
+import Realm from 'realm';
+
 const Activity = {
   name: 'Activity',
   properties: {
@@ -18,4 +20,13 @@ const ActivityLog = {
   },
 };
 
-export {Activity, ActivityLog};
+const CurrentActivity = {
+  name: 'CurrentActivity',
+  properties: {
+    name: 'string',
+    type: 'string',
+    startTime: 'date',
+  },
+};
+
+export default new Realm({schema: [Activity, ActivityLog, CurrentActivity]});
