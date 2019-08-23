@@ -25,7 +25,7 @@ class ToolBar extends Component {
 export default ToolBar;
 
 const styles = StyleSheet.create({
-  mainContainer: {flexDirection: 'row'},
+  mainContainer: {flexDirection: 'row', width: 40},
   hamburger: {
     marginLeft: 10,
   },

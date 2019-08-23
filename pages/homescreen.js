@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, StyleSheet, Text, ToastAndroid} from 'react-native';
 import {createStackNavigator} from 'react-navigation';
 
-import ToolBar from '../component/app-toolbar/toolbar-component';
+import ToolBar from '../component/app-toolbar/toolbar.component';
 import SearchableDropDown from '../component/searchable-dropdown/searchable-dropdownbox.component';
 
 import realm from '../data/activities-schema';
@@ -12,23 +12,45 @@ class HomeScreen extends Component {
     super(props);
     let currentActivity = realm.objects('CurrentActivity');
     let temp = realm.objects('Activity');
-    this.data = temp.map(({goalTime, ...obj}) => obj);
     if (currentActivity.length === 0) {
       this.state = {
         currentActivity: '',
-        hours: 0,
-        minutes: 0,
+        duration: 0,
+        data: temp.map(({goalTime, ...obj}) => obj),
       };
     } else {
       let dur = this.findDuration(currentActivity[0].startTime);
-      let hr = Math.floor(dur / 60);
-      let min = Math.floor(dur % 60);
       this.state = {
         currentActivity: {...currentActivity[0]},
-        hours: hr,
-        minutes: min,
+        duration: dur,
+        data: temp.map(({goalTime, ...obj}) => obj),
       };
     }
+  }
+
+  componentDidMount() {
+    this.willFocusSubscription = this.props.navigation.addListener(
+      'willFocus',
+      () => {
+        let temp = realm.objects('Activity');
+        this.setState({data: temp.map(({goalTime, ...obj}) => obj)});
+      },
+    );
+    setInterval(() => {
+      this.setState(state => {
+        if (state.currentActivity !== '') {
+          let dur = this.findDuration(state.currentActivity.startTime);
+          return {duration: dur};
+        } else {
+          return {duration: 0};
+        }
+      });
+    }, 60 * 1000);
+  }
+
+  componentWillUnmount() {
+    this.willFocusSubscription.remove();
+    clearInterval();
   }
 
   findDuration = start => Math.floor((new Date() - start) / 60000);
@@ -63,7 +85,7 @@ class HomeScreen extends Component {
           curr.update('type', activity.type);
         });
       }
-      this.setState({currentActivity: {...activity}, hours: 0, minutes: 0});
+      this.setState({currentActivity: {...activity}, duration: 0});
     }
   };
 
@@ -74,20 +96,25 @@ class HomeScreen extends Component {
       <View style={style.mainContainer}>
         <View style={style.frameContainer}>
           <View style={style.boldContainer}>
-            <Text style={style.textStyle}> You are</Text>
+            <Text style={style.textStyleBold}> You are</Text>
           </View>
           <SearchableDropDown
-            data={this.data}
+            data={this.state.data}
             updateValue={this.onActivityChange}
-            value={this.state.currentActivity.name}
-            extractValue={this.extractName}
-          />
+            extractValue={this.extractName}>
+            <View style={style.displayContainer}>
+              <Text style={style.textStyle}>
+                {this.state.currentActivity.name || 'Select an activity'}
+              </Text>
+            </View>
+          </SearchableDropDown>
           <View style={style.boldContainer}>
-            <Text style={style.textStyle}> For</Text>
+            <Text style={style.textStyleBold}> For</Text>
           </View>
           <View style={style.clockContainer}>
             <Text style={style.clockStyle}>
-              {this.state.hours} HH : {this.state.minutes} MM
+              {Math.floor(this.state.duration / 60)} HH :
+              {Math.floor(this.state.duration % 60)} MM
             </Text>
           </View>
         </View>
@@ -131,6 +158,10 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
   textStyle: {
+    fontSize: 20,
+    textAlign: 'left',
+  },
+  textStyleBold: {
     fontSize: 45,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
@@ -142,5 +173,13 @@ const style = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
+  },
+  displayContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: -1,
+    padding: 12,
+    backgroundColor: '#d0dcf2',
+    borderRadius: 20,
   },
 });

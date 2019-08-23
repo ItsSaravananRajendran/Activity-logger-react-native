@@ -29,4 +29,18 @@ const CurrentActivity = {
   },
 };
 
-export default new Realm({schema: [Activity, ActivityLog, CurrentActivity]});
+const CalendarActivity = {
+  name: 'CalendarActivity',
+  primaryKey: 'id',
+  properties: {
+    id: {type: 'string', indexed: true},
+    name: 'string',
+    startTime: 'date',
+    endTime: 'date',
+  },
+};
+
+export default new Realm({
+  deleteRealmIfMigrationNeeded: true,
+  schema: [Activity, CalendarActivity, ActivityLog, CurrentActivity],
+});

@@ -45,12 +45,9 @@ class SearchableDropDown extends Component {
     return (
       <View>
         <TouchableHighlight onPress={this.toggleVisibility}>
-          <View style={style.displayContainer}>
-            <Text style={style.textStyle}>
-              {this.props.value || 'Select an activity'}
-            </Text>
-          </View>
+          {this.props.children}
         </TouchableHighlight>
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -100,14 +97,6 @@ class SearchableDropDown extends Component {
 export default SearchableDropDown;
 
 const style = StyleSheet.create({
-  displayContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: -1,
-    padding: 12,
-    backgroundColor: '#d0dcf2',
-    borderRadius: 20,
-  },
   mainContainer: {
     flex: 1,
     opacity: 0.9,

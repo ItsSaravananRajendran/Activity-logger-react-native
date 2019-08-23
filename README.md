@@ -1,27 +1,28 @@
-# APP UNDER-CONSTRUTION
+# APP UNDER-CONSTRUCTION
 
 # ActivityLogger
-A personal app to track your day to day activitites, helps you to visualize, track your time and plan ahead. 
 
-# TODOS
+A personal app to track your day to day activities, helps you to visualize, track your time and plan ahead.
 
-- [x]  Current Activity page 
+# TODO
+
+- [x] Current Activity page
   - [x] Display current activity
   - [x] Searchable dropDown input box
   - [x] Log activities
-- [x] Add activites
+- [x] Add activities
   - [x] Persist data
   - [x] Slider for selecting time
-  - [x] Error message 
-- [ ] Display Calender 
-  - [ ] Schedulable 
+  - [x] Error message
+- [x] Display Calender
+  - [ ] Schedulable
   - [ ] Select start date
   - [ ] Toggle rows
 - [ ] Display Activities
   - [ ] Display activities in list
   - [ ] Editable
   - [ ] swipe left delete
-- [ ] Graph for Different activites
-  - [ ] Quadrant Graph 
-    - [ ] Task Graph for specific quadran
+- [ ] Graph for Different activities
+  - [ ] Quadrant Graph
+    - [ ] Task Graph for specific quadrant
   - [ ] Goals graph

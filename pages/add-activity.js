@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Input, Slider, Button} from 'react-native-elements';
 import RadioForm from 'react-native-simple-radio-button';
 
-import ToolBar from '../component/app-toolbar/toolbar-component';
+import ToolBar from '../component/app-toolbar/toolbar.component';
 import WrapLabel from '../component/form/wrap-label.component';
-import {capitalizeFirstLetter} from '../utils/utils';
+import {capitalizeFirstLetter} from '../utils/util.scripts';
 
 import {ACTIVITY_TYPES} from '../data/activity-types';
 import realm from '../data/activities-schema';
@@ -96,7 +96,7 @@ class AddActivityScreen extends Component {
             value={this.state.goalTime}
             onValueChange={this.onGoalTimeChange}
             minimumValue={0}
-            maximumValue={100}
+            maximumValue={50}
             step={0.5}
             thumbTintColor="#e0eeff"
             style={style.slider}
