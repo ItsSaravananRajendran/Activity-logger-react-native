@@ -9,9 +9,18 @@ const Activity = {
   },
 };
 
+const hiddenRowState = {
+  name: 'HiddenRow',
+  properties: {
+    HiddenRow: 'data',
+  },
+};
+
 const ActivityLog = {
   name: 'ActivityLog',
+  primaryKey: 'id',
   properties: {
+    id: {type: 'string', indexed: true},
     name: 'string',
     type: 'string',
     startTime: 'date',
@@ -42,5 +51,11 @@ const CalendarActivity = {
 
 export default new Realm({
   deleteRealmIfMigrationNeeded: true,
-  schema: [Activity, CalendarActivity, ActivityLog, CurrentActivity],
+  schema: [
+    Activity,
+    hiddenRowState,
+    CalendarActivity,
+    ActivityLog,
+    CurrentActivity,
+  ],
 });

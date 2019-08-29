@@ -22,6 +22,7 @@ function getTimeWithInterval(interval = 30) {
 }
 
 function getDayHeader(startTime) {
+  startTime = new Date(startTime);
   let Day_of_week = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   let result = new Array(7);
   for (let I = 0; I < 7; I++) {
@@ -37,10 +38,7 @@ function getDayHeader(startTime) {
 }
 
 function queryObjToArray(queriesObj, weekStart, interval = 30) {
-  let data = new Array((60 * 24 * 7) / interval);
-  for (let I = 0; I < data.length; I++) {
-    data[I] = '';
-  }
+  let data = new Array((60 * 24 * 7) / interval).fill(' ');
   for (let activity of queriesObj) {
     let startIdx = Math.floor((activity.startTime - weekStart) / interval);
     let endIdx = Math.floor((activity.endTime - weekStart) / interval);

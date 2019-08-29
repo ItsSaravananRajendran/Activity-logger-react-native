@@ -9,13 +9,12 @@ import {
   StyleSheet,
   Text,
   View,
-  ToastAndroid,
 } from 'react-native';
 
 const NUM_COLS = 7;
 const NUM_ROWS = 48;
 const CELL_WIDTH = 70;
-const CELL_HEIGHT = 20;
+const CELL_HEIGHT = 35;
 
 class Sheet extends React.Component {
   constructor(props) {
@@ -26,12 +25,6 @@ class Sheet extends React.Component {
       [{nativeEvent: {contentOffset: {x: this.scrollPosition}}}],
       {useNativeDriver: false},
     );
-    let slot = this.props.data.map((data, index) => ({
-      data: data,
-      isSelected: false,
-      key: index,
-    }));
-    this.state = {slot: slot, isRowHidden: ''};
   }
 
   handleScroll = e => {
@@ -41,30 +34,15 @@ class Sheet extends React.Component {
     }
   };
 
-  handleCellClick = slot => {
-    ToastAndroid.show(String(slot.data), ToastAndroid.short);
-    this.setState(state => {
-      let item = [...this.state.slot];
-      item[slot.key] = {...slot, isSelected: !slot.isSelected};
-      return {data: item};
-    });
-
-    this.props.onCellPress(slot);
-  };
-
-  handleRowHeaderClick = idx => {
-    this.setState(state => {
-      let isRowHidden = [...state.isRowHidden];
-      isRowHidden[idx] = !isRowHidden[idx];
-      return {isRowHidden: isRowHidden};
-    });
-  };
-
   formatCell = (slot, style = styles.cell) => {
     return (
-      <TouchableHighlight key={slot.key} onPress={this.handleCellClick}>
-        <View style={[style, slot.isSelected && styles.selected]}>
-          <Text>{slot.data || ' '}</Text>
+      <TouchableHighlight
+        key={slot.key}
+        onPress={() => {
+          this.props.onCellPress(slot);
+        }}>
+        <View style={[style, this.isSelected[slot.key] && styles.selected]}>
+          <Text>{slot.data}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -81,7 +59,12 @@ class Sheet extends React.Component {
   };
 
   formatColumn = columnData => {
-    let column = columnData.item.map(slot => this.formatCell(slot));
+    let column = columnData.item
+      .filter(slot => {
+        let idx = slot.key % NUM_ROWS;
+        return !this.props.rowHiddenIndex[idx];
+      })
+      .map(slot => this.formatCell(slot));
     return <View style={styles.column}>{column}</View>;
   };
 
@@ -105,23 +88,21 @@ class Sheet extends React.Component {
   formatIdentityColumn = () => {
     let rowHeader = [];
     for (let I = 0; I < NUM_ROWS; I++) {
-      if (!this.state.isRowHidden[I]) {
-        rowHeader.push(this.props.rowHeader[I]);
+      if (!this.props.rowHiddenIndex[I]) {
+        rowHeader.push(this.rowHeaderData[I]);
       }
     }
-    let rowHeaderColumn = rowHeader.map((data, idx) =>
-      this.formatHeaderCell(data, idx, idx => this.handleRowHeaderClick),
+    let rowHeaderColumn = rowHeader.map(({data, idx}) =>
+      this.formatHeaderCell(data, idx, () => this.props.onRowHeaderClick(idx)),
     );
     return <View style={styles.identity}>{rowHeaderColumn}</View>;
   };
 
-  formatBody = () => {
+  formatBody = slotData => {
     let data = [];
     for (let I = 0; I < NUM_COLS; I++) {
-      if (!this.state.isRowHidden[I]) {
-        let start = I * NUM_ROWS;
-        data.push(this.state.slot.slice(start, start + NUM_ROWS));
-      }
+      let start = I * NUM_ROWS;
+      data.push(slotData.slice(start, start + NUM_ROWS));
     }
 
     return (
@@ -153,10 +134,18 @@ class Sheet extends React.Component {
   }
 
   render() {
-    let body = this.formatBody();
+    this.isSelected = new Array(NUM_COLS * NUM_ROWS).fill(false);
+    for (let ind of this.props.index) {
+      this.isSelected[ind] = true;
+    }
+    this.rowHeaderData = this.props.rowHeader.map((data, idx) => ({data, idx}));
+    let slotData = this.props.data.map((data, index) => ({
+      data: data,
+      key: index,
+    }));
 
+    let body = this.formatBody(slotData);
     let data = [{key: 'body', render: body}];
-
     return (
       <View style={styles.container}>
         {this.formatHeader()}
@@ -176,6 +165,7 @@ const styles = StyleSheet.create({
   identity: {position: 'absolute', width: CELL_WIDTH},
   body: {marginLeft: CELL_WIDTH},
   cell: {
+    justifyContent: 'center',
     alignItems: 'center',
     width: CELL_WIDTH,
     height: CELL_HEIGHT,
@@ -184,5 +174,5 @@ const styles = StyleSheet.create({
     borderColor: black,
   },
   column: {flexDirection: 'column'},
-  selected: {},
+  selected: {backgroundColor: 'red'},
 });
