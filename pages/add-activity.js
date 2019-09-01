@@ -17,7 +17,7 @@ class AddActivityScreen extends Component {
     super(props);
     this.state = {
       name: '',
-      type: '',
+      type: 'Q1',
       goalTime: 0,
       errMessage: '',
     };
@@ -52,7 +52,6 @@ class AddActivityScreen extends Component {
       });
       this.setState({
         name: '',
-        type: '',
         goalTime: 0,
         errMessage: '',
       });

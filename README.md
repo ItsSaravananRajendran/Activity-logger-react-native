@@ -16,8 +16,8 @@ A personal app to track your day to day activities, helps you to visualize, trac
   - [x] Error message
 - [x] Display Calender
   - [ ] Schedulable
-  - [ ] Select start date
-  - [ ] Toggle rows
+  - [x] Select start date
+  - [x] Toggle rows
 - [ ] Display Activities
   - [ ] Display activities in list
   - [ ] Editable

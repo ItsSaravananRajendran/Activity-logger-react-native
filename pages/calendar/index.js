@@ -3,16 +3,17 @@ import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import ToolBar from '../component/app-toolbar/toolbar.component';
-import Sheet from '../component/sheet/sheet.component';
-import SearchableDropDown from '../component/searchable-dropdown/searchable-dropdownbox.component';
+import ToolBar from '../../component/app-toolbar/toolbar.component';
+import Sheet from '../../component/sheet/sheet.component';
+import SearchableDropDown from '../../component/searchable-dropdown/searchable-dropdownbox.component';
 
-import realm from '../data/activities-schema';
+import {getHiddenRowState, persistRowHiddenState} from './data.utils';
 import {
   getTimeWithInterval,
   getDayHeader,
   queryObjToArray,
-} from '../utils/util.scripts';
+} from '../../utils/util.scripts';
+import realm from '../../data/activities-schema';
 
 class calendarScreen extends Component {
   static navigationOptions = ({navigation}) => {
@@ -37,13 +38,17 @@ class calendarScreen extends Component {
 
   constructor(props) {
     super(props);
-    let data = queryObjToArray([], new Date(), 30);
+    const data = queryObjToArray([], new Date(), 30);
+    const isRowHidden = getHiddenRowState();
+    const index = [];
+    const isLoading = true;
+    const date = new Date();
     this.state = {
-      isLoading: true,
-      data: data,
-      index: [],
-      isRowHidden: new Array(48).fill(false),
-      date: new Date(),
+      isLoading,
+      data,
+      isRowHidden,
+      index,
+      date,
     };
   }
 
@@ -67,17 +72,24 @@ class calendarScreen extends Component {
   };
 
   _resetRowHeader = () => {
-    this.setState({
-      isRowHidden: new Array(48).fill(false),
-    });
+    const isRowHidden = new Array(48).fill(false);
+    this.setState(
+      {
+        isRowHidden,
+      },
+      () => persistRowHiddenState(this.state.isRowHidden),
+    );
   };
 
   onRowHeaderClick = idx => {
-    this.setState(state => {
-      let isRowHidden = [...state.isRowHidden];
-      isRowHidden[idx] = true;
-      return {isRowHidden: isRowHidden};
-    });
+    this.setState(
+      state => {
+        let isRowHidden = [...state.isRowHidden];
+        isRowHidden[idx] = true;
+        return {isRowHidden};
+      },
+      () => persistRowHiddenState(this.state.isRowHidden),
+    );
   };
 
   onCellPress = slot => {
@@ -96,6 +108,12 @@ class calendarScreen extends Component {
     });
   };
 
+  onDateChange = stringDate => {
+    const date = new Date(stringDate);
+    const data = queryObjToArray([], data, 30);
+    this.setState({date, data});
+  };
+
   render() {
     let rowHeader = getTimeWithInterval(30);
     let columnHeader = getDayHeader(this.state.date);
@@ -108,6 +126,7 @@ class calendarScreen extends Component {
         columnHeader={columnHeader}
         onCellPress={this.onCellPress}
         onRowHeaderClick={this.onRowHeaderClick}
+        onDateChange={this.onDateChange}
       />
     );
   }

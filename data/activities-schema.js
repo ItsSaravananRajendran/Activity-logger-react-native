@@ -10,9 +10,9 @@ const Activity = {
 };
 
 const hiddenRowState = {
-  name: 'HiddenRow',
+  name: 'HiddenRowState',
   properties: {
-    HiddenRow: 'data',
+    HiddenRow: 'bool?[]',
   },
 };
 
@@ -20,7 +20,7 @@ const ActivityLog = {
   name: 'ActivityLog',
   primaryKey: 'id',
   properties: {
-    id: {type: 'string', indexed: true},
+    id: {type: 'int', indexed: true},
     name: 'string',
     type: 'string',
     startTime: 'date',

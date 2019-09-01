@@ -17,11 +17,6 @@ class SearchableDropDown extends Component {
       modalVisible: false,
       searchValue: '',
     };
-    this.data = this.props.data.map(obj => ({
-      key: shortid.generate(),
-      ...obj,
-    }));
-    this.filteredData = this.data.map(obj => ({...obj}));
     this.extractValue = this.props.extractValue;
   }
 
@@ -42,6 +37,11 @@ class SearchableDropDown extends Component {
   };
 
   render() {
+    this.data = this.props.data.map(obj => ({
+      key: shortid.generate(),
+      ...obj,
+    }));
+    this.filteredData = this.data.map(obj => ({...obj}));
     return (
       <View>
         <TouchableHighlight onPress={this.toggleVisibility}>

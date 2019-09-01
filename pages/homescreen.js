@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Text, ToastAndroid} from 'react-native';
 import {createStackNavigator} from 'react-navigation';
+import shortid from 'shortid';
 
 import ToolBar from '../component/app-toolbar/toolbar.component';
 import SearchableDropDown from '../component/searchable-dropdown/searchable-dropdownbox.component';
@@ -10,8 +11,8 @@ import realm from '../data/activities-schema';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    let currentActivity = realm.objects('CurrentActivity');
-    let temp = realm.objects('Activity');
+    const currentActivity = realm.objects('CurrentActivity');
+    const temp = realm.objects('Activity');
     if (currentActivity.length === 0) {
       this.state = {
         currentActivity: '',
@@ -19,7 +20,7 @@ class HomeScreen extends Component {
         data: temp.map(({goalTime, ...obj}) => obj),
       };
     } else {
-      let dur = this.findDuration(currentActivity[0].startTime);
+      const dur = this.findDuration(currentActivity[0].startTime);
       this.state = {
         currentActivity: {...currentActivity[0]},
         duration: dur,
@@ -32,24 +33,32 @@ class HomeScreen extends Component {
     this.willFocusSubscription = this.props.navigation.addListener(
       'willFocus',
       () => {
-        let temp = realm.objects('Activity');
+        const temp = realm.objects('Activity');
         this.setState({data: temp.map(({goalTime, ...obj}) => obj)});
+        setInterval(() => {
+          this.setState(state => {
+            if (state.currentActivity !== '') {
+              let dur = this.findDuration(state.currentActivity.startTime);
+              return {duration: dur};
+            } else {
+              return {duration: 0};
+            }
+          });
+        }, 60 * 1000);
       },
     );
-    setInterval(() => {
-      this.setState(state => {
-        if (state.currentActivity !== '') {
-          let dur = this.findDuration(state.currentActivity.startTime);
-          return {duration: dur};
-        } else {
-          return {duration: 0};
-        }
-      });
-    }, 60 * 1000);
+
+    this.willBlurSubscription = this.props.navigation.addListener(
+      'willBlur',
+      () => {
+        clearInterval();
+      },
+    );
   }
 
   componentWillUnmount() {
     this.willFocusSubscription.remove();
+    this.willBlurSubscription.remove();
     clearInterval();
   }
 
@@ -59,6 +68,7 @@ class HomeScreen extends Component {
     if (activity.name !== this.state.currentActivity.name) {
       if (this.state.currentActivity !== '') {
         let completedActivity = this.state.currentActivity;
+        completedActivity.id = realm.objects('ActivityLog').length + 1;
         completedActivity.endTime = new Date();
         completedActivity.duration = this.findDuration(
           completedActivity.startTime,
@@ -72,11 +82,6 @@ class HomeScreen extends Component {
         realm.write(() => {
           realm.create('CurrentActivity', activity);
         });
-        ToastAndroid.showWithGravity(
-          'Activity has been added successfully',
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-        );
       } else {
         realm.write(() => {
           let curr = realm.objects('CurrentActivity');

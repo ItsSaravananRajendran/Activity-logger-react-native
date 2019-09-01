@@ -11,6 +11,8 @@ import {
   View,
 } from 'react-native';
 
+import MyDatePicker from '../date-picker/date-picker.component';
+
 const NUM_COLS = 7;
 const NUM_ROWS = 48;
 const CELL_WIDTH = 70;
@@ -59,9 +61,9 @@ class Sheet extends React.Component {
   };
 
   formatColumn = columnData => {
-    let column = columnData.item
+    const column = columnData.item
       .filter(slot => {
-        let idx = slot.key % NUM_ROWS;
+        const idx = slot.key % NUM_ROWS;
         return !this.props.rowHiddenIndex[idx];
       })
       .map(slot => this.formatCell(slot));
@@ -71,7 +73,9 @@ class Sheet extends React.Component {
   formatHeader = () => {
     return (
       <View style={styles.header}>
-        {this.formatHeaderCell('Date')}
+        <View style={styles.cell}>
+          <MyDatePicker onDateChange={this.props.onDateChange} />
+        </View>
         <ScrollView
           ref={ref => (this.headerScrollView = ref)}
           horizontal={true}
@@ -92,7 +96,7 @@ class Sheet extends React.Component {
         rowHeader.push(this.rowHeaderData[I]);
       }
     }
-    let rowHeaderColumn = rowHeader.map(({data, idx}) =>
+    const rowHeaderColumn = rowHeader.map(({data, idx}) =>
       this.formatHeaderCell(data, idx, () => this.props.onRowHeaderClick(idx)),
     );
     return <View style={styles.identity}>{rowHeaderColumn}</View>;
@@ -135,17 +139,17 @@ class Sheet extends React.Component {
 
   render() {
     this.isSelected = new Array(NUM_COLS * NUM_ROWS).fill(false);
-    for (let ind of this.props.index) {
+    for (const ind of this.props.index) {
       this.isSelected[ind] = true;
     }
     this.rowHeaderData = this.props.rowHeader.map((data, idx) => ({data, idx}));
-    let slotData = this.props.data.map((data, index) => ({
+    const slotData = this.props.data.map((data, index) => ({
       data: data,
       key: index,
     }));
 
-    let body = this.formatBody(slotData);
-    let data = [{key: 'body', render: body}];
+    const body = this.formatBody(slotData);
+    const data = [{key: 'body', render: body}];
     return (
       <View style={styles.container}>
         {this.formatHeader()}
