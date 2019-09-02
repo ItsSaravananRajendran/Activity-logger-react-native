@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import {createStackNavigator} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -7,11 +13,17 @@ import ToolBar from '../../component/app-toolbar/toolbar.component';
 import Sheet from '../../component/sheet/sheet.component';
 import SearchableDropDown from '../../component/searchable-dropdown/searchable-dropdownbox.component';
 
-import {getHiddenRowState, persistRowHiddenState} from './data.utils';
+import {
+  getHiddenRowState,
+  persistRowHiddenState,
+  getScheduledActivities,
+  insertScheduledActivities,
+} from './data.utils';
 import {
   getTimeWithInterval,
   getDayHeader,
   queryObjToArray,
+  indicesToTimeSlot,
 } from '../../utils/util.scripts';
 import realm from '../../data/activities-schema';
 
@@ -38,13 +50,15 @@ class calendarScreen extends Component {
 
   constructor(props) {
     super(props);
-    const data = queryObjToArray([], new Date(), 30);
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    const queries = getScheduledActivities(date);
+    const data = queryObjToArray(queries, date, 30);
     const isRowHidden = getHiddenRowState();
     const index = [];
-    const isLoading = true;
-    const date = new Date();
+    const loading = true;
     this.state = {
-      isLoading,
+      loading,
       data,
       isRowHidden,
       index,
@@ -55,15 +69,20 @@ class calendarScreen extends Component {
   componentDidMount() {
     this.props.navigation.setParams({setActivity: this._setActivity});
     this.props.navigation.setParams({resetRowHeader: this._resetRowHeader});
+    setTimeout(() => this.setState({loading: false}), 0);
+  }
+
+  componentWillUnmount() {
+    clearTimeout();
   }
 
   _setActivity = activity => {
     this.setState(prevState => {
-      let indArr = [...prevState.index];
-      let newData = [...prevState.data];
-      for (let I of indArr) {
-        newData[I] = activity.name;
-      }
+      const indArr = [...prevState.index];
+      const timeSlot = indicesToTimeSlot(prevState.date, indArr);
+      insertScheduledActivities(activity.name, timeSlot);
+      const queries = getScheduledActivities(prevState.date);
+      const newData = queryObjToArray(queries, prevState.date, 30);
       return {
         data: newData,
         index: [],
@@ -110,7 +129,9 @@ class calendarScreen extends Component {
 
   onDateChange = stringDate => {
     const date = new Date(stringDate);
-    const data = queryObjToArray([], data, 30);
+    date.setHours(0, 0, 0, 0);
+    const queries = getScheduledActivities(date);
+    const data = queryObjToArray(queries, date, 30);
     this.setState({date, data});
   };
 
@@ -118,16 +139,24 @@ class calendarScreen extends Component {
     let rowHeader = getTimeWithInterval(30);
     let columnHeader = getDayHeader(this.state.date);
     return (
-      <Sheet
-        data={this.state.data}
-        index={this.state.index}
-        rowHiddenIndex={this.state.isRowHidden}
-        rowHeader={rowHeader}
-        columnHeader={columnHeader}
-        onCellPress={this.onCellPress}
-        onRowHeaderClick={this.onRowHeaderClick}
-        onDateChange={this.onDateChange}
-      />
+      <View style={{flex: 1}}>
+        {this.state.loading ? (
+          <View style={styles.main}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        ) : (
+          <Sheet
+            data={this.state.data}
+            index={this.state.index}
+            rowHiddenIndex={this.state.isRowHidden}
+            rowHeader={rowHeader}
+            columnHeader={columnHeader}
+            onCellPress={this.onCellPress}
+            onRowHeaderClick={this.onRowHeaderClick}
+            onDateChange={this.onDateChange}
+          />
+        )}
+      </View>
     );
   }
 }
@@ -150,5 +179,5 @@ export {calendarActivity_StackNavigator};
 export default calendarScreen;
 
 const styles = StyleSheet.create({
-  main: {flex: 1, flexDirection: 'row'},
+  main: {flex: 1, justifyContent: 'center', alignItems: 'center'},
 });

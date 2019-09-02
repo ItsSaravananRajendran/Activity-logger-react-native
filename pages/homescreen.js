@@ -59,7 +59,6 @@ class HomeScreen extends Component {
   componentWillUnmount() {
     this.willFocusSubscription.remove();
     this.willBlurSubscription.remove();
-    clearInterval();
   }
 
   findDuration = start => Math.floor((new Date() - start) / 60000);

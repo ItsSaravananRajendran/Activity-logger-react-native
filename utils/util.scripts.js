@@ -40,14 +40,42 @@ function getDayHeader(startTime) {
 function queryObjToArray(queriesObj, weekStart, interval = 30) {
   let data = new Array((60 * 24 * 7) / interval).fill(' ');
   for (let activity of queriesObj) {
-    let startIdx = Math.floor((activity.startTime - weekStart) / interval);
-    let endIdx = Math.floor((activity.endTime - weekStart) / interval);
+    let startIdx = Math.floor(
+      (activity.startTime - weekStart) / (interval * 60000),
+    );
+    let endIdx = Math.floor(
+      (activity.endTime - weekStart) / (interval * 60000),
+    );
     while (startIdx < endIdx) {
       data[startIdx] = activity.name;
       startIdx++;
     }
   }
   return data;
+}
+
+function slotToTime(time, index) {
+  let timeStart = new Date(time);
+  timeStart.setMinutes(timeStart.getMinutes() + index * 30);
+  return timeStart;
+}
+
+function indicesToTimeSlot(weekStart, indices) {
+  let timeSlot = [];
+  let prev = indices[0];
+  const time = {
+    startTime: slotToTime(weekStart, indices[0]),
+  };
+  for (let I = 1; I < indices.length; I++) {
+    if (prev !== indices[I] - 1) {
+      time.endTime = slotToTime(weekStart, prev + 1);
+      timeSlot.push({...time});
+      time.startTime = slotToTime(weekStart, indices[I]);
+    }
+  }
+  time.endTime = slotToTime(weekStart, indices[indices.length - 1] + 1);
+  timeSlot.push({...time});
+  return timeSlot;
 }
 
 function formatDate(date) {
@@ -68,4 +96,5 @@ export {
   queryObjToArray,
   getDayHeader,
   formatDate,
+  indicesToTimeSlot,
 };
