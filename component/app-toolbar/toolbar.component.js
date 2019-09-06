@@ -4,7 +4,7 @@ import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 class ToolBar extends Component {
-  //Structure for the navigatin Drawer
+  //Structure for the navigation Drawer
   toggleDrawer = () => {
     //Props to open/close the drawer
     this.props.navigationProps.toggleDrawer();

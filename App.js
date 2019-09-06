@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {homeActivity_StackNavigator} from './pages/homescreen';
 import {calendarActivity_StackNavigator} from './pages/calendar';
 import {addActivity_StackNavigator} from './pages/add-activity';
+import {insightActivity_StackNavigator} from './pages/insight';
 import customNavigationDrawer from './component/nav-drawer/nav-drawer-component';
 
 const drawerNavigator = createDrawerNavigator(
@@ -33,6 +34,16 @@ const drawerNavigator = createDrawerNavigator(
         drawerLabel: 'Calendar',
         drawerIcon: ({tintColor}) => (
           <Icon name="calendar-check" size={24} color={tintColor} />
+        ),
+      },
+    },
+
+    insightActivity: {
+      screen: insightActivity_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Insights',
+        drawerIcon: ({tintColor}) => (
+          <Icon name="chart-line" size={24} color={tintColor} />
         ),
       },
     },

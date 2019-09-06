@@ -10,6 +10,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import MyDatePicker from '../date-picker/date-picker.component';
 
@@ -74,7 +75,11 @@ class Sheet extends React.Component {
     return (
       <View style={styles.header}>
         <View style={styles.cell}>
-          <MyDatePicker onDateChange={this.props.onDateChange} />
+          <MyDatePicker
+            onDateChange={this.props.onDateChange}
+            hideText={true}
+            iconComponent={<Icon name="calendar-day" size={20} />}
+          />
         </View>
         <ScrollView
           ref={ref => (this.headerScrollView = ref)}

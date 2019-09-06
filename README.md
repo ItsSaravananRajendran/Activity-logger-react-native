@@ -22,7 +22,7 @@ A personal app to track your day to day activities, helps you to visualize, trac
   - [ ] Display activities in list
   - [ ] Editable
   - [ ] swipe left delete
-- [ ] Graph for Different activities
-  - [ ] Quadrant Graph
-    - [ ] Task Graph for specific quadrant
+- [x] Graph for Different activities
+  - [x] Quadrant Graph
+    - [x] Task Graph for specific quadrant
   - [ ] Goals graph
