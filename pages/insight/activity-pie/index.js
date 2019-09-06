@@ -11,9 +11,14 @@ import FromToDateBar from '../../../component/fromToDate/fromToDate.component';
 class ActivityPieScreen extends Component {
   constructor(props) {
     super(props);
+    const startTime = new Date();
+    const endTime = new Data();
+    startTime.setHours(0, 0, 0, 0);
+    endTime.setDate(startTime.getDate() + 1);
+    endTime.setHours(0, 0, 0, 0);
     this.state = {
-      startTime: new Date('2019-09-03'),
-      endTime: new Date(),
+      startTime: startTime,
+      endTime: endTime,
       modalVisible: false,
       type: 'Q2',
     };
@@ -46,10 +51,12 @@ class ActivityPieScreen extends Component {
   };
 
   startDateChange = date => {
+    date.setHours(0, 0, 0, 0);
     this.setState({startTime: date});
   };
 
   endDateChange = date => {
+    date.setHours(23, 59, 59, 0);
     this.setState({endTime: date});
   };
 
