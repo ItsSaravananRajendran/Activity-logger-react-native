@@ -12,7 +12,7 @@ class ActivityPieScreen extends Component {
   constructor(props) {
     super(props);
     const startTime = new Date();
-    const endTime = new Data();
+    const endTime = new Date();
     startTime.setHours(0, 0, 0, 0);
     endTime.setDate(startTime.getDate() + 1);
     endTime.setHours(0, 0, 0, 0);
@@ -50,12 +50,14 @@ class ActivityPieScreen extends Component {
     this.setState(prevState => ({modalVisible: !prevState.modalVisible}));
   };
 
-  startDateChange = date => {
+  startDateChange = stringDate => {
+    let date = new Date(stringDate);
     date.setHours(0, 0, 0, 0);
     this.setState({startTime: date});
   };
 
-  endDateChange = date => {
+  endDateChange = stringDate => {
+    let date = new Date(stringDate);
     date.setHours(23, 59, 59, 0);
     this.setState({endTime: date});
   };
