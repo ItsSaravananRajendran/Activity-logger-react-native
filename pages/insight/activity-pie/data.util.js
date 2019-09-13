@@ -27,14 +27,15 @@ function getTypeActivityData(startTime, endTime, type) {
   let result = [];
   for (const {name, duration} of activitiesLog) {
     if (name in data) {
-      data.value += log.duration;
+      data[name].value += duration;
     } else {
-      data.name = {};
-      data.name.key = name;
-      data.name.label = name;
-      data.name.value = duration;
-      data.name.svg = {
-        fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+      data[name] = {
+        key: name,
+        label: name,
+        value: duration,
+        svg: {
+          fill: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        },
       };
     }
   }

@@ -18,6 +18,11 @@ class SearchableDropDown extends Component {
       searchValue: '',
     };
     this.extractValue = this.props.extractValue;
+    this.data = this.props.data.map(obj => ({
+      key: shortid.generate(),
+      ...obj,
+    }));
+    this.filteredData = this.data.map(obj => ({...obj}));
   }
 
   toggleVisibility = () => {
@@ -27,7 +32,8 @@ class SearchableDropDown extends Component {
   filterData = text => {
     this.setState({searchValue: text});
     this.filteredData = this.data.filter(obj =>
-      this.extractValue(obj)
+      this.props
+        .extractValue(obj)
         .toLowerCase()
         .includes(text.toLowerCase()),
     );
@@ -37,11 +43,6 @@ class SearchableDropDown extends Component {
   };
 
   render() {
-    this.data = this.props.data.map(obj => ({
-      key: shortid.generate(),
-      ...obj,
-    }));
-    this.filteredData = this.data.map(obj => ({...obj}));
     return (
       <View>
         <TouchableHighlight onPress={this.toggleVisibility}>
