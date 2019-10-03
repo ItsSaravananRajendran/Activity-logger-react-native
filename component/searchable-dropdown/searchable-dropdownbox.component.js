@@ -19,7 +19,7 @@ class SearchableDropDown extends Component {
     };
     this.extractValue = this.props.extractValue;
     this.data = this.props.data.map(obj => ({
-      key: shortid.generate(),
+      key: obj.name,
       ...obj,
     }));
     this.filteredData = this.data.map(obj => ({...obj}));
@@ -30,6 +30,10 @@ class SearchableDropDown extends Component {
   };
 
   filterData = text => {
+    this.data = this.props.data.map(obj => ({
+      key: obj.name,
+      ...obj,
+    }));
     this.setState({searchValue: text});
     this.filteredData = this.data.filter(obj =>
       this.props
