@@ -6,6 +6,7 @@ import {homeActivity_StackNavigator} from './pages/homescreen';
 import {calendarActivity_StackNavigator} from './pages/calendar';
 import {addActivity_StackNavigator} from './pages/add-activity';
 import {insightActivity_StackNavigator} from './pages/insight';
+import {editLog_StackNavigator} from './pages/editLog/editLog';
 import customNavigationDrawer from './component/nav-drawer/nav-drawer-component';
 
 const drawerNavigator = createDrawerNavigator(
@@ -15,7 +16,7 @@ const drawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerLabel: 'Activity',
         drawerIcon: ({tintColor}) => (
-          <Icon name="running" size={24} color={tintColor} />
+          <Icon name="running" size={22} color={tintColor} />
         ),
       },
     },
@@ -24,7 +25,7 @@ const drawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerLabel: 'Add Activity',
         drawerIcon: ({tintColor}) => (
-          <Icon name="plus" size={24} color={tintColor} />
+          <Icon name="plus" size={22} color={tintColor} />
         ),
       },
     },
@@ -33,7 +34,7 @@ const drawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerLabel: 'Calendar',
         drawerIcon: ({tintColor}) => (
-          <Icon name="calendar-check" size={24} color={tintColor} />
+          <Icon name="calendar-check" size={22} color={tintColor} />
         ),
       },
     },
@@ -43,7 +44,17 @@ const drawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerLabel: 'Insights',
         drawerIcon: ({tintColor}) => (
-          <Icon name="chart-line" size={24} color={tintColor} />
+          <Icon name="chart-line" size={22} color={tintColor} />
+        ),
+      },
+    },
+
+    editLogActivity: {
+      screen: editLog_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Edit logs',
+        drawerIcon: ({tintColor}) => (
+          <Icon name="edit" size={22} color={tintColor} />
         ),
       },
     },

@@ -8,7 +8,6 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
-import shortid from 'shortid';
 
 class SearchableDropDown extends Component {
   constructor(props) {
